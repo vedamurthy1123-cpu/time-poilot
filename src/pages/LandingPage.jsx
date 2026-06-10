@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-const logo = '/time-poilot/3d_logo.png';
+const logo = `${import.meta.env.BASE_URL}3d_logo.png`;
 
 function LandingPage() {
   const panelsRef = useRef([]);

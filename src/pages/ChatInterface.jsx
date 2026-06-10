@@ -160,7 +160,10 @@ function ChatInterface() {
 
       {/* API Key Modal — shown when no key is configured */}
       {showApiKeyModal && (
-        <ApiKeyModal onKeySet={() => setShowApiKeyModal(false)} />
+        <ApiKeyModal
+          onKeySet={() => setShowApiKeyModal(false)}
+          onBack={() => { setShowApiKeyModal(false); navigate('/'); }}
+        />
       )}
       
       {/* Centered Splash Layout when no messages */}

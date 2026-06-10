@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { saveApiKey, getApiKey } from '../services/geminiApi';
 
-function ApiKeyModal({ onKeySet }) {
+function ApiKeyModal({ onKeySet, onBack }) {
   const [inputKey, setInputKey] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,6 +30,15 @@ function ApiKeyModal({ onKeySet }) {
       <div className="relative w-full max-w-md bg-surface-container-high rounded-3xl border border-white/10 p-6 shadow-2xl animate-scale-up">
         {/* Header */}
         <div className="flex items-center gap-3 mb-5">
+          {onBack && (
+            <button
+              onClick={onBack}
+              title="Go back"
+              className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-on-surface-variant hover:text-on-surface mr-1 flex-shrink-0"
+            >
+              <span className="material-symbols-outlined text-2xl">arrow_back</span>
+            </button>
+          )}
           <span className="material-symbols-outlined text-primary text-3xl">key</span>
           <div>
             <h2 className="font-headline-md text-xl font-bold text-on-background">Gemini API Key Required</h2>

@@ -12,8 +12,8 @@ function ApiKeyModal({ onKeySet }) {
       setError('Please enter your API key.');
       return;
     }
-    if (!trimmed.startsWith('AIza')) {
-      setError('This does not look like a valid Gemini API key. Keys start with "AIza...".');
+    if (!trimmed.startsWith('AIza') && !trimmed.startsWith('AQ.')) {
+      setError('Invalid key format. Gemini keys start with "AIza..." or "AQ."');
       return;
     }
     setLoading(true);
@@ -56,7 +56,7 @@ function ApiKeyModal({ onKeySet }) {
               value={inputKey}
               onChange={(e) => { setInputKey(e.target.value); setError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-              placeholder="AIza..."
+              placeholder="AIza... or AQ...."
               className="w-full bg-surface-container border border-outline-variant/30 focus:border-primary/60 focus:ring-0 rounded-xl px-4 py-3 text-on-background font-mono text-sm outline-none transition-all placeholder:text-on-surface-variant/40"
               autoFocus
             />

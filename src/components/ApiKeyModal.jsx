@@ -96,7 +96,7 @@ function ApiKeyModal({ onKeySet, onBack }) {
               <span className="material-symbols-outlined text-lg">arrow_back</span>
               Go Back
             </button>
-          )}>
+          )}
         </div>
       </div>
     </div>

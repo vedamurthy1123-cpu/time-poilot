@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTimetable } from '../context/TimetableContext';
-import { generateTimetableData, generateTimetableFromPDF } from '../services/geminiApi';
+import { generateTimetableData, generateTimetableFromPDF, getApiKey } from '../services/geminiApi';
 import { generateTimeSlots, generateInitialSchedule } from '../utils/scheduler';
 import { cn } from '../utils/cn';
+import ApiKeyModal from '../components/ApiKeyModal';
 
 function ChatInterface() {
   const navigate = useNavigate();
@@ -12,8 +13,16 @@ function ChatInterface() {
   const [input, setInput] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showFormatModal, setShowFormatModal] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Show API key modal if no key is configured
+  useEffect(() => {
+    if (!getApiKey()) {
+      setShowApiKeyModal(true);
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -148,6 +157,11 @@ function ChatInterface() {
   return (
     <>
       <div className="fixed inset-0 bg-mesh -z-10"></div>
+
+      {/* API Key Modal — shown when no key is configured */}
+      {showApiKeyModal && (
+        <ApiKeyModal onKeySet={() => setShowApiKeyModal(false)} />
+      )}
       
       {/* Centered Splash Layout when no messages */}
       {!isChatStarted ? (

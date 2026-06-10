@@ -1,7 +1,24 @@
 import { GoogleGenAI } from '@google/genai';
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+export const STORAGE_KEY = 'timepilot_gemini_api_key';
+
+export function getApiKey() {
+  return localStorage.getItem(STORAGE_KEY) || import.meta.env.VITE_GEMINI_API_KEY || '';
+}
+
+export function saveApiKey(key) {
+  localStorage.setItem(STORAGE_KEY, key.trim());
+}
+
+export function clearApiKey() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function getAI() {
+  const key = getApiKey();
+  if (!key) return null;
+  return new GoogleGenAI({ apiKey: key });
+}
 
 // Ensure we handle when the AI doesn't return exactly JSON but adds markdown code block wrappers
 function parseJSON(text) {
@@ -14,6 +31,7 @@ function parseJSON(text) {
 }
 
 export async function generateTimetableData(prompt) {
+  const ai = getAI();
   if (!ai) throw new Error("API Key not found");
 
   const systemInstruction = `You are an expert school timetable generator. Extract the following information from the user's prompt and output ONLY valid JSON.
@@ -53,6 +71,7 @@ Heuristics:
 }
 
 export async function processAIPromptEdit(prompt, currentState) {
+  const ai = getAI();
   if (!ai) throw new Error("API Key not found");
 
   const systemInstruction = `# Time-Pilot Timetable Editing System Prompt
@@ -126,6 +145,7 @@ Output purely the JSON block, no markdown formatting outside of the JSON.`;
 }
 
 export async function generateTimetableFromPDF(base64PDF) {
+  const ai = getAI();
   if (!ai) throw new Error("API Key not found");
 
   const systemInstruction = `You are an expert school timetable extractor. Analyze the uploaded PDF timetable and extract ALL schedule data with 100% accuracy.
